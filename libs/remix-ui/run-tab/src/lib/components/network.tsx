@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import Popover from 'react-bootstrap/Popover'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import {CopyToClipboard} from '@remix-ui/clipboard'
+import {useIntl} from 'react-intl'
 import {logHtml} from '../actions'
 import {getAccountBalance} from '../bif/bif-service'
 
@@ -25,6 +27,7 @@ export const InputTooltip = ({text, enabled = true, children}: any) => {
 }
 
 export function NetworkUI(props: {bif: any; setBif: any}) {
+  const intl = useIntl()
   const [editing, setEditing] = useState(false)
   const [status, setStatus] = useState('Disconnected')
   const [nodeUrl, setNodeUrl] = useState('http://domestic-testnet.bitfactory.cn')
@@ -33,6 +36,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const [apiKey, setApiKey] = useState('')
   const [apiSecret, setApiSecret] = useState('')
   const [balance, setBalance] = useState(0)
+  const [address, setAddress] = useState('')
 
   const {bif, setBif} = props
 
@@ -43,7 +47,8 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     setStatus(bif.status)
     setBalance(bif.balance)
     setApiKey(bif.apiKey)
-    setApiSecret(bif.setApiSecret)
+    setApiSecret(bif.apiSecret)
+    setAddress(bif.address)
   }, [bif])
 
   const onEdit = () => {
@@ -55,12 +60,13 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     setBrowserUrl(bif.browserUrl)
     setPrivateKey(bif.privateKey)
     setApiKey(bif.apiKey)
-    setApiSecret(bif.setApiSecret)
+    setApiSecret(bif.apiSecret)
+    setAddress(bif.address)
   }
   const onSave = async () => {
     setStatus('Connecting...')
 
-    const resp = await getAccountBalance(nodeUrl, privateKey, apiKey, apiSecret)
+    const resp = await getAccountBalance({nodeUrl, privateKey, apiKey, apiSecret})
     if (resp.code !== 'SUCCESS') {
       setStatus('Disconnected')
       logHtml(resp.message)
@@ -69,6 +75,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
 
     setStatus('Connected')
     setBalance(resp.detail)
+    setAddress(resp.address)
     setEditing(false)
     setBif({
       nodeUrl,
@@ -78,6 +85,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
       balance: resp.detail,
       apiKey,
       apiSecret,
+      address: resp.address,
     })
   }
 
@@ -120,6 +128,14 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
         <InputTooltip enabled={editing} text="星火链网 API Secret">
           <input type="password" className="form-control" id="private-key" disabled={!editing} value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
         </InputTooltip>
+      </div>
+      <div style={txMetaRowStyle}>
+        <div className="d-inline-block" style={labelStyle}>
+          账户地址：{address.replace(address.substring(7, address.length - 6), '***')}
+        </div>
+        <div className="btn">
+          <CopyToClipboard tip={intl.formatMessage({id: 'udapp.copy'})} content={address} direction={'top'} />
+        </div>
       </div>
       <div style={txMetaRowStyle}>
         <div style={labelStyle}>账户余额：{balance ? balance / 100000000 : 0} XHT</div>

@@ -179,16 +179,15 @@ export const contractQuery = async (funABI: any, funArgs: any, address: any) => 
   return {code: 'SUCCESS', detail: {sourceAddress: sdk.keypair.privateKeyManagerByKey(privateKey).encAddress, queryResult: resp.query_rets[0]}}
 }
 
-export const getAccountBalance = async (nodeUrl = '', privateKey = '', apiKey = '', apiSecret = '') => {
-  const bif = JSON.parse(localStorage.getItem('bif') || '{}')
+export const getAccountBalance = async ({nodeUrl, privateKey, apiKey, apiSecret}) => {
   const sdk = new BIFCoreSDK({
-    host: nodeUrl || bif.nodeUrl,
-    apiKey: apiKey || bif.apiKey, 
-    apiSecret: apiSecret || bif.apiSecret,
+    host: nodeUrl,
+    apiKey: apiKey, 
+    apiSecret: apiSecret,
   })
   let address = ''
   try {
-    address = sdk.keypair.privateKeyManagerByKey(privateKey || bif.privateKey).encAddress
+    address = sdk.keypair.privateKeyManagerByKey(privateKey).encAddress
   } catch (error) {
     return {code: 'ERROR', message: error.toString()}
   }
@@ -197,5 +196,5 @@ export const getAccountBalance = async (nodeUrl = '', privateKey = '', apiKey = 
     return {code: 'ERROR', message: JSON.stringify(resp)}
   }
 
-  return {code: 'SUCCESS', detail: resp.result.balance}
+  return {code: 'SUCCESS', detail: resp.result.balance, address}
 }
