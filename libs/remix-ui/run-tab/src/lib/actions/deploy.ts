@@ -316,8 +316,8 @@ export const runTransactions = async (
 
       return terminalLogger(plugin, log);
     },
-    (returnValue) => {
-      const response = txFormat.decodeResponse(returnValue, funcABI);
+    ({code, data, desc}) => {
+      const response = code === 0 ? txFormat.decodeResponse(data, funcABI) : [desc];
 
       dispatch(setDecodedResponse(instanceIndex, response, funcIndex));
     },

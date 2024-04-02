@@ -128,7 +128,14 @@ async function runOrCallContractMethod(
         if (resp.code !== 'SUCCESS') {
           return logCallback(`${logMsg} errored: ${resp.message}`);
         }
-        outputCb(resp.detail.queryResult.data);
+        const {queryResult} = resp.detail
+        outputCb(queryResult);
+        let decodedReturnValue
+        if (queryResult.code === 0) {
+          decodedReturnValue = txFormat.decodeResponse(queryResult.data, funABI)
+        } else {
+          decodedReturnValue = queryResult.desc
+        }
         logKnownTransaction({
           type: 'knownTransaction',
           value: {
@@ -138,7 +145,7 @@ async function runOrCallContractMethod(
               to: address,
               fn: funABI.name,
               params: eventsDecoder._decodeInputParams(data.dataHex.replace('0x', '').substring(8), funABI),
-              decodedReturnValue: txFormat.decodeResponse(resp.detail.queryResult.data, funABI),
+              decodedReturnValue,
             },
           },
           provider: 'bif',
