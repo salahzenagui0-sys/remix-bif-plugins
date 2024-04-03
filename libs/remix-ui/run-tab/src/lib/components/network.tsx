@@ -131,7 +131,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
       </div>
       <div style={txMetaRowStyle}>
         <div className="d-inline-block" style={labelStyle}>
-          账户地址：{address.replace(address.substring(7, address.length - 6), '***')}
+          账户地址：{address && address.replace(address.substring(7, address.length - 6), '***')}
         </div>
         <div className="btn">
           <CopyToClipboard tip={intl.formatMessage({id: 'udapp.copy'})} content={address} direction={'top'} />
