@@ -33,8 +33,6 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const [nodeUrl, setNodeUrl] = useState('http://domestic-testnet.bitfactory.cn')
   const [browserUrl, setBrowserUrl] = useState('https://test-bj-explorer.bitfactory.cn')
   const [privateKey, setPrivateKey] = useState('')
-  const [apiKey, setApiKey] = useState('')
-  const [apiSecret, setApiSecret] = useState('')
   const [balance, setBalance] = useState(0)
   const [address, setAddress] = useState('')
 
@@ -46,8 +44,6 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     setPrivateKey(bif.privateKey)
     setStatus(bif.status)
     setBalance(bif.balance)
-    setApiKey(bif.apiKey)
-    setApiSecret(bif.apiSecret)
     setAddress(bif.address)
   }, [bif])
 
@@ -59,14 +55,12 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     setNodeUrl(bif.nodeUrl)
     setBrowserUrl(bif.browserUrl)
     setPrivateKey(bif.privateKey)
-    setApiKey(bif.apiKey)
-    setApiSecret(bif.apiSecret)
     setAddress(bif.address)
   }
   const onSave = async () => {
     setStatus('Connecting...')
 
-    const resp = await getAccountBalance({nodeUrl, privateKey, apiKey, apiSecret})
+    const resp = await getAccountBalance({nodeUrl, privateKey})
     if (resp.code !== 'SUCCESS') {
       setStatus('Disconnected')
       logHtml(resp.message)
@@ -83,8 +77,6 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
       privateKey,
       status: 'Connected',
       balance: resp.detail,
-      apiKey,
-      apiSecret,
       address: resp.address,
     })
   }
@@ -116,19 +108,6 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
         </InputTooltip>
       </div>
 
-      <div style={txMetaRowStyle}>
-        <div style={labelStyle}>API Key</div>
-        <InputTooltip enabled={editing} text="星火链网 API Key">
-          <input type="password" className="form-control" id="private-key" disabled={!editing} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
-        </InputTooltip>
-      </div>
-
-      <div style={txMetaRowStyle}>
-        <div style={labelStyle}>API Secret</div>
-        <InputTooltip enabled={editing} text="星火链网 API Secret">
-          <input type="password" className="form-control" id="private-key" disabled={!editing} value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
-        </InputTooltip>
-      </div>
       <div style={txMetaRowStyle}>
         <div className="d-inline-block" style={labelStyle}>
           账户地址：{address && address.replace(address.substring(7, address.length - 6), '***')}

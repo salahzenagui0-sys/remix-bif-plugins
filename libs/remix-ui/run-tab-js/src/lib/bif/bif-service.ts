@@ -1,4 +1,4 @@
-import BIFCoreSDK from 'bifcore-sdk-nodejs-bop'
+import BIFCoreSDK from 'bifcore-sdk-nodejs'
 
 const parseParams = (abiInputs, funArgs) => {
   const params = {}
@@ -17,12 +17,10 @@ const parseParams = (abiInputs, funArgs) => {
 }
 
 export const createContract = async (selectedContract, {gasLimit, sendValue, sendUnit}, funArgs): Promise<any> => {
-  const {nodeUrl, privateKey, apiKey, apiSecret} = JSON.parse(localStorage.getItem('bif') || '{}')
+  const {nodeUrl, privateKey} = JSON.parse(localStorage.getItem('bif') || '{}')
   const constructor = selectedContract.getConstructorInterface()
   const sdk = new BIFCoreSDK({
     host: nodeUrl,
-    apiKey, 
-    apiSecret,
   })
   let params
   try {
@@ -79,11 +77,9 @@ export const createContract = async (selectedContract, {gasLimit, sendValue, sen
 }
 
 export const contractInvoke = async (funABI: any, funArgs: any, address: any, {gasLimit, sendValue, sendUnit}) => {
-  const {nodeUrl, privateKey, apiKey, apiSecret} = JSON.parse(localStorage.getItem('bif') || '{}')
+  const {nodeUrl, privateKey} = JSON.parse(localStorage.getItem('bif') || '{}')
   const sdk = new BIFCoreSDK({
     host: nodeUrl,
-    apiKey, 
-    apiSecret,
   })
   const sourceAddress = sdk.keypair.privateKeyManagerByKey(privateKey).encAddress
   let params
@@ -130,11 +126,9 @@ export const contractInvoke = async (funABI: any, funArgs: any, address: any, {g
 }
 
 export const getTransactionInfo = async (txHash) => {
-  const {nodeUrl, apiKey, apiSecret} = JSON.parse(localStorage.getItem('bif') || '{}')
+  const {nodeUrl} = JSON.parse(localStorage.getItem('bif') || '{}')
   const sdk = new BIFCoreSDK({
     host: nodeUrl,
-    apiKey, 
-    apiSecret,
   })
   const resp = await sdk.transaction.getTransactionInfo({hash: txHash})
   if (resp.errorCode != 0) {
@@ -153,11 +147,9 @@ export const getTransactionInfo = async (txHash) => {
 }
 
 export const contractQuery = async (funABI: any, funArgs: any, address: any) => {
-  const {nodeUrl, privateKey, apiKey, apiSecret} = JSON.parse(localStorage.getItem('bif') || '{}')
+  const {nodeUrl, privateKey} = JSON.parse(localStorage.getItem('bif') || '{}')
   const sdk = new BIFCoreSDK({
     host: nodeUrl,
-    apiKey, 
-    apiSecret,
   })
   let params
   try {
@@ -179,11 +171,9 @@ export const contractQuery = async (funABI: any, funArgs: any, address: any) => 
   return {code: 'SUCCESS', detail: {sourceAddress: sdk.keypair.privateKeyManagerByKey(privateKey).encAddress, queryResult: resp.query_rets[0]}}
 }
 
-export const getAccountBalance = async ({nodeUrl, privateKey, apiKey, apiSecret}) => {
+export const getAccountBalance = async ({nodeUrl, privateKey}) => {
   const sdk = new BIFCoreSDK({
     host: nodeUrl,
-    apiKey: apiKey, 
-    apiSecret: apiSecret,
   })
   let address = ''
   try {
