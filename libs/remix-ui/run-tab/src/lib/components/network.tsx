@@ -30,7 +30,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const intl = useIntl()
   const [editing, setEditing] = useState(false)
   const [status, setStatus] = useState('Disconnected')
-  const [nodeUrl, setNodeUrl] = useState('http://domestic-testnet.bitfactory.cn')
+  const [nodeUrl, setNodeUrl] = useState('https://domestic-testnet.bitfactory.cn')
   const [browserUrl, setBrowserUrl] = useState('https://test-bj-explorer.bitfactory.cn')
   const [privateKey, setPrivateKey] = useState('')
   const [apiKey, setApiKey] = useState('')
@@ -41,7 +41,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const {bif, setBif} = props
 
   useEffect(() => {
-    setNodeUrl(bif.nodeUrl || 'http://test.bifcore.bitfactory.cn')
+    setNodeUrl(bif.nodeUrl || 'https://domestic-testnet.bitfactory.cn')
     setBrowserUrl(bif.browserUrl || 'https://test-bj-explorer.bitfactory.cn')
     setPrivateKey(bif.privateKey)
     setStatus(bif.status)
@@ -97,7 +97,7 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     <form id="network-form" style={networkStyle}>
       <div style={txMetaRowStyle}>
         <div style={labelStyle}>节点地址</div>
-        <InputTooltip enabled={editing} text="星火链网节点地址，比如：http://test.bifcore.bitfactory.cn">
+        <InputTooltip enabled={editing} text="星火链网开放平台地址，比如：https://domestic-testnet.bitfactory.cn">
           <input className="form-control" id="node-url" type="text" disabled={!editing} value={nodeUrl} onChange={(e) => setNodeUrl(e.target.value)} />
         </InputTooltip>
       </div>
