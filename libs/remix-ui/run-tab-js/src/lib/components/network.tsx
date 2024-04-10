@@ -30,8 +30,8 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const intl = useIntl()
   const [editing, setEditing] = useState(false)
   const [status, setStatus] = useState('Disconnected')
-  const [nodeUrl, setNodeUrl] = useState('https://domestic-testnet.bitfactory.cn')
-  const [browserUrl, setBrowserUrl] = useState('https://test-bj-explorer.bitfactory.cn')
+  const [nodeUrl, setNodeUrl] = useState('https://bif-testnet.bitfactory.cn')
+  const [browserUrl, setBrowserUrl] = useState('https://test-explorer.bitfactory.cn')
   const [privateKey, setPrivateKey] = useState('')
   const [apiKey, setApiKey] = useState('')
   const [apiSecret, setApiSecret] = useState('')
@@ -41,8 +41,8 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
   const {bif, setBif} = props
 
   useEffect(() => {
-    setNodeUrl(bif.nodeUrl || 'https://domestic-testnet.bitfactory.cn')
-    setBrowserUrl(bif.browserUrl || 'https://test-bj-explorer.bitfactory.cn')
+    setNodeUrl(bif.nodeUrl || 'https://bif-testnet.bitfactory.cn')
+    setBrowserUrl(bif.browserUrl || 'https://test-explorer.bitfactory.cn')
     setPrivateKey(bif.privateKey)
     setStatus(bif.status)
     setBalance(bif.balance)
@@ -97,14 +97,14 @@ export function NetworkUI(props: {bif: any; setBif: any}) {
     <form id="network-form" style={networkStyle}>
       <div style={txMetaRowStyle}>
         <div style={labelStyle}>节点地址</div>
-        <InputTooltip enabled={editing} text="星火链网开放平台地址，比如：https://domestic-testnet.bitfactory.cn">
+        <InputTooltip enabled={editing} text="星火链网开放平台地址，比如：https://bif-testnet.bitfactory.cn">
           <input className="form-control" id="node-url" type="text" disabled={!editing} value={nodeUrl} onChange={(e) => setNodeUrl(e.target.value)} />
         </InputTooltip>
       </div>
 
       <div style={txMetaRowStyle}>
         <div style={labelStyle}>区块链浏览器地址</div>
-        <InputTooltip enabled={editing} text="星火链网区块链浏览器地址，比如：https://test-bj-explorer.bitfactory.cn">
+        <InputTooltip enabled={editing} text="星火链网区块链浏览器地址，比如：https://test-explorer.bitfactory.cn">
           <input className="form-control" id="node-url" type="text" disabled={!editing} value={browserUrl} onChange={(e) => setBrowserUrl(e.target.value)} />
         </InputTooltip>
       </div>
