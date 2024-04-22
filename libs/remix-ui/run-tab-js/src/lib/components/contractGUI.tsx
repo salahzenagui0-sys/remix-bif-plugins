@@ -253,7 +253,7 @@ export function ContractGUI(props: ContractGUIProps) {
       <div className="udapp_contractActionsContainerSingle pt-2" style={{display: toggleContainer ? 'none' : 'flex'}}>
         <CustomTooltip
           delay={0}
-          placement={'right'}
+          placement={'top'}
           tooltipClasses="text-wrap"
           tooltipId="remixUdappInstanceButtonTooltip"
           tooltipText={
@@ -324,7 +324,7 @@ export function ContractGUI(props: ContractGUIProps) {
             })}
           </div>
           <div className="d-flex udapp_group udapp_multiArg">
-            <CustomTooltip placement={'right'} tooltipClasses="text-nowrap" tooltipId="remixUdappInstanceButtonTooltip" tooltipText={buttonOptions.title}>
+            <CustomTooltip placement={'top'} tooltipClasses="text-nowrap" tooltipId="remixUdappInstanceButtonTooltip" tooltipText={buttonOptions.title}>
               <div onClick={handleExpandMultiClick}>
                 <button
                   type="button"
