@@ -94,6 +94,10 @@ export const runTabReducer = (state: RunTabState = runTabInitialState, action: A
     return {
       ...state,
       bif: {...state.bif, ...action.payload},
+      instances: state.bif.nodeUrl === action.payload.nodeUrl ? state.instances : {
+        instanceList: [],
+        error: null
+      },
     };
   }
   
