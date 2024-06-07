@@ -1,5 +1,5 @@
 diff --git a/node_modules/@ethersproject/abi/lib/coders/address.js b/node_modules/@ethersproject/abi/lib/coders/address.js
-index 118428a..482911e 100644
+index 118428a..302f047 100644
 --- a/node_modules/@ethersproject/abi/lib/coders/address.js
 +++ b/node_modules/@ethersproject/abi/lib/coders/address.js
 @@ -19,6 +19,7 @@ exports.AddressCoder = void 0;
@@ -10,31 +10,40 @@ index 118428a..482911e 100644
  var AddressCoder = /** @class */ (function (_super) {
      __extends(AddressCoder, _super);
      function AddressCoder(localName) {
-@@ -29,7 +30,9 @@ var AddressCoder = /** @class */ (function (_super) {
+@@ -29,7 +30,13 @@ var AddressCoder = /** @class */ (function (_super) {
      };
      AddressCoder.prototype.encode = function (writer, value) {
          try {
 -            value = (0, address_1.getAddress)(value);
 +            const bytes = bs58.decode(value.substring(10))
++            const signType = value.substring(8, 9)
++            const encodeType = value.substring(9, 10)
++            const signMap = {'z': '7A'}
++            const encodeMap = {'s': '73', 't': '74'}
 +            const hex = Buffer.from(bytes).toString('hex')
-+            value = '0x6566' + hex;
++            value = `0x${signMap[signType] || '65'}${encodeMap[encodeType] || '66'}${hex}`
          }
          catch (error) {
              this._throwError(error.message, value);
-@@ -37,7 +40,10 @@ var AddressCoder = /** @class */ (function (_super) {
+@@ -37,7 +44,15 @@ var AddressCoder = /** @class */ (function (_super) {
          return writer.writeValue(value);
      };
      AddressCoder.prototype.decode = function (reader) {
 -        return (0, address_1.getAddress)((0, bytes_1.hexZeroPad)(reader.readValue().toHexString(), 20));
-+        const hex = reader.readValue().toHexString().replace('0x6566', '');
++        const value = reader.readValue().toHexString();
++        const hex = value.substring(6)
 +        const bytes = Uint8Array.from(Buffer.from(hex, 'hex'))
 +        const address = bs58.encode(bytes)
-+        return 'did:bid:ef' + address;
++        const signType = value.substring(2, 4)
++        const encodeType = value.substring(4, 6)
++        const signMap = {'7A': 'z'}
++        const encodeMap = {'73': 's', '74': 't'}
++        return `did:bid:${signMap[signType] || 'e'}${encodeMap[encodeType] || 'f'}${address}`;
      };
      return AddressCoder;
  }(abstract_coder_1.Coder));
 diff --git a/node_modules/@ethersproject/abi/src.ts/coders/address.ts b/node_modules/@ethersproject/abi/src.ts/coders/address.ts
-index 6ae2d27..0b9b5da 100644
+index 6ae2d27..36f7b3c 100644
 --- a/node_modules/@ethersproject/abi/src.ts/coders/address.ts
 +++ b/node_modules/@ethersproject/abi/src.ts/coders/address.ts
 @@ -2,6 +2,7 @@
@@ -45,26 +54,35 @@ index 6ae2d27..0b9b5da 100644
  
  import { Coder, Reader, Writer } from "./abstract-coder";
  
-@@ -17,7 +18,9 @@ export class AddressCoder extends Coder {
+@@ -17,7 +18,13 @@ export class AddressCoder extends Coder {
  
      encode(writer: Writer, value: string): number {
          try {
 -            value = getAddress(value)
 +            const bytes = bs58.decode(value.substring(10))
++            const signType = value.substring(8, 9)
++            const encodeType = value.substring(9, 10)
++            const signMap = {'z': '7A'}
++            const encodeMap = {'s': '73', 't': '74'}
 +            const hex = Buffer.from(bytes).toString('hex')
-+            value = '0x6566' + hex
++            value = `0x${signMap[signType] || '65'}${encodeMap[encodeType] || '66'}${hex}`
          } catch (error) {
              this._throwError(error.message, value);
          }
-@@ -25,7 +28,10 @@ export class AddressCoder extends Coder {
+@@ -25,7 +32,15 @@ export class AddressCoder extends Coder {
      }
  
      decode(reader: Reader): any {
 -        return getAddress(hexZeroPad(reader.readValue().toHexString(), 20));
-+        const hex = reader.readValue().toHexString().replace('0x6566', '');
++        const value = reader.readValue().toHexString();
++        const hex = value.substring(6)
 +        const bytes = Uint8Array.from(Buffer.from(hex, 'hex'))
 +        const address = bs58.encode(bytes)
-+        return 'did:bid:ef' + address;
++        const signType = value.substring(2, 4)
++        const encodeType = value.substring(4, 6)
++        const signMap = {'7A': 'z'}
++        const encodeMap = {'73': 's', '74': 't'}
++        return `did:bid:${signMap[signType] || 'e'}${encodeMap[encodeType] || 'f'}${address}`;
      }
  }
  
