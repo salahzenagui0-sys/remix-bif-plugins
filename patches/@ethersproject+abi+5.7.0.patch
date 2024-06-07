@@ -18,7 +18,7 @@ index 118428a..302f047 100644
 +            const bytes = bs58.decode(value.substring(10))
 +            const signType = value.substring(8, 9)
 +            const encodeType = value.substring(9, 10)
-+            const signMap = {'z': '7A'}
++            const signMap = {'z': '7a'}
 +            const encodeMap = {'s': '73', 't': '74'}
 +            const hex = Buffer.from(bytes).toString('hex')
 +            value = `0x${signMap[signType] || '65'}${encodeMap[encodeType] || '66'}${hex}`
@@ -36,7 +36,7 @@ index 118428a..302f047 100644
 +        const address = bs58.encode(bytes)
 +        const signType = value.substring(2, 4)
 +        const encodeType = value.substring(4, 6)
-+        const signMap = {'7A': 'z'}
++        const signMap = {'7a': 'z'}
 +        const encodeMap = {'73': 's', '74': 't'}
 +        return `did:bid:${signMap[signType] || 'e'}${encodeMap[encodeType] || 'f'}${address}`;
      };
@@ -62,7 +62,7 @@ index 6ae2d27..36f7b3c 100644
 +            const bytes = bs58.decode(value.substring(10))
 +            const signType = value.substring(8, 9)
 +            const encodeType = value.substring(9, 10)
-+            const signMap = {'z': '7A'}
++            const signMap = {'z': '7a'}
 +            const encodeMap = {'s': '73', 't': '74'}
 +            const hex = Buffer.from(bytes).toString('hex')
 +            value = `0x${signMap[signType] || '65'}${encodeMap[encodeType] || '66'}${hex}`
@@ -80,7 +80,7 @@ index 6ae2d27..36f7b3c 100644
 +        const address = bs58.encode(bytes)
 +        const signType = value.substring(2, 4)
 +        const encodeType = value.substring(4, 6)
-+        const signMap = {'7A': 'z'}
++        const signMap = {'7a': 'z'}
 +        const encodeMap = {'73': 's', '74': 't'}
 +        return `did:bid:${signMap[signType] || 'e'}${encodeMap[encodeType] || 'f'}${address}`;
      }
